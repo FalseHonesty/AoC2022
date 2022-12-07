@@ -1,10 +1,10 @@
 package dev.falsehonesty.utils
 
-fun <T> List<T>.splitWhen(predicate: (T) -> Boolean): List<List<T>> {
+fun <T> List<T>.splitWhen(includeBoundary: Boolean = false, predicate: (T) -> Boolean): List<List<T>> {
     return flatMapIndexed { index: Int, value: T ->
         when {
             index == 0 || index == this.lastIndex -> listOf(index)
-            predicate(value) -> listOf(index - 1, index + 1)
+            predicate(value) -> listOf(index - 1, index + if (includeBoundary) 0 else 1)
             else -> emptyList()
         }
     }.windowed(size = 2, step = 2) { (from, to) -> slice(from..to) }
